@@ -7,6 +7,8 @@ const secrets = require('../config/secrets.js');
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
+  if(!username || !password) return res.status(400).json({ error: 'Provide both a username and password' });
+
   const hash = bcryptjs.hashSync(password, process.env.HASH_ROUNDS || 8);
 
   try {
@@ -21,6 +23,8 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
+  if (!username || !password) return res.status(400).json({ error: 'Provide both a username and password' });
 
   try {
     const user = await db('users').where({ username }).first();
