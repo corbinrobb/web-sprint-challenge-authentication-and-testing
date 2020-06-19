@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const db = require('../database/dbConfig.js');
-const secrets = require('../config/secrets.js');
+const generateToken = require('./generateToken.js');
 
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
@@ -39,20 +38,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: "Could not find user in database" });
   }
 });
-
-
-function generateToken(user) {
-  const payload = {
-    subject: user.id,
-    username: user.username
-  }
-
-  const options = {
-    expiresIn: '1d',
-  };
-
-  return jwt.sign(payload, secrets.jwtSecret, options);
-}
 
 
 module.exports = router;
